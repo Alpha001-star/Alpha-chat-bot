@@ -32,24 +32,21 @@
     }
     .app { display: flex; flex-direction: column; height: 100%; max-width: 780px; margin: 0 auto; background: var(--bg); }
     header { display: flex; align-items: center; gap: 12px; padding: calc(12px + env(safe-area-inset-top)) 18px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; background: var(--bg); }
-    /* 1. Modify your existing .avatar class to look like this: */
-.avatar {
-  width: 36px; 
-  height: 36px;
-  border-radius: 50%;
-  display: flex; 
-  align-items: center; 
-  justify-content: center;
-  flex-shrink: 0;
-  overflow: hidden; /* 👈 CRITICAL: This crops your image into a perfect circle */
-}
-
-/* 2. Add this NEW block right below it: */
-.avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* 👈 This prevents your face from stretching or distortion */
-}
+    .avatar {
+      width: 36px; 
+      height: 36px;
+      border-radius: 50%;
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
     .header-info h1 { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
     .status { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
     .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #3ecf8e; animation: pulse 2.4s ease-in-out infinite; }
@@ -60,26 +57,23 @@
     .messages::-webkit-scrollbar { width: 4px; }
     .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
     .welcome { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; padding: 40px 10px; margin: auto 0; }
-    /* 1. Modify your existing .welcome-icon class to look like this: */
-.welcome-icon {
-  width: 64px; 
-  height: 64px; 
-  border-radius: 20px; 
-  background: linear-gradient(135deg, #5b8dee22, #7b5ce722); 
-  border: 1px solid #5b8dee44; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  flex-shrink: 0;
-  overflow: hidden; /* 👈 This clips your photo into the rounded square boundary */
-}
-
-/* 2. Add this NEW block right below it: */
-.welcome-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* 👈 This prevents your photo from stretching */
-}
+    .welcome-icon {
+      width: 64px; 
+      height: 64px; 
+      border-radius: 20px; 
+      background: linear-gradient(135deg, #5b8dee22, #7b5ce722); 
+      border: 1px solid #5b8dee44; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .welcome-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
     .welcome h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
     .welcome p { color: var(--muted); max-width: 340px; font-size: 14px; }
     .suggestions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 8px; }
@@ -131,10 +125,9 @@
 <body>
 <div class="app">
   <header>
-
-<div class="avatar">
-  <img src="Alpha.png" alt="Avatar" />
-</div>
+    <div class="avatar">
+      <img src="Alpha.png" alt="Avatar" />
+    </div>
     <div class="header-info">
       <h1>Alpha</h1>
       <div class="status"><span class="status-dot"></span><span>Online</span></div>
@@ -144,9 +137,9 @@
 
   <div class="messages" id="messages">
     <div class="welcome" id="welcome">
-        <div class="welcome-icon">
-            <img src="Alpha.png" alt="Welcome Avatar" />
-          </div>
+      <div class="welcome-icon">
+        <img src="Alpha.png" alt="Welcome Avatar" />
+      </div>
       <h2>How can I help you?</h2>
       <p>Ask me anything — I can write, explain, code, brainstorm, and more.</p>
       <div class="suggestions">
@@ -186,6 +179,7 @@
 
 <script>
   const ENDPOINT = '/api/chat'; 
+  const IMAGE_SRC = 'Alpha.png'; /* 💡 Change this string if you want to use a direct web link instead */
 
   const SYSTEM_PROMPT = `You are an elite, highly intelligent, and versatile AI assistant. Your responses must strictly adhere to the following rules:
 1. FORMATTING & MARKDOWN: Always use markdown. Wrap code blocks inside appropriate tags (e.g. \`\`\`html). Use bold terms (**text**) frequently to keep layouts scannable on mobile screens.
@@ -205,21 +199,26 @@
 
   function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 140) + 'px'; }
   function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
-  function sendSuggestion(btn) { inputEl.value = btn.textContent; sendMessage(); }
   
- // Update your clearChat function to look like this:
-function clearChat() {
-  history = [];
-  messagesEl.innerHTML = `
-    <div class="welcome" id="welcome">
-      <div class="welcome-icon">
-        <img src="Alpha.png" alt="Welcome Avatar" />
+  function sendSuggestion(btn) { 
+    inputEl.value = btn.textContent; 
+    sendMessage(); 
+    inputEl.focus(); 
+  }
+
+  function clearChat() {
+    history = [];
+    messagesEl.innerHTML = `
+      <div class="welcome" id="welcome">
+        <div class="welcome-icon">
+          <img src="${IMAGE_SRC}" alt="Welcome Avatar" />
+        </div>
+        <h2>How can I help you?</h2>
+        <p>Ask me anything — I can write, explain, code, brainstorm, and more.</p>
       </div>
-      <h2>How can I help you?</h2>
-      <p>Ask me anything — I can write, explain, code, brainstorm, and more.</p>
-    </div>
-  `;
-}
+    `;
+  }
+  
   function timeNow() { return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
 
   function appendBubble(role, text) {
@@ -279,6 +278,7 @@ function clearChat() {
     t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     t = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
     t = t.replace(/\n/g, '<br>');
+    t = t.replace(/(<li>.*?<\/li>)/g, '<ul style="margin: 4px 0; padding-left: 5px;">$1</ul>');
     return t;
   }
 
