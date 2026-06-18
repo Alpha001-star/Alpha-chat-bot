@@ -1,6 +1,11 @@
 {
-    "rewrites": [
-      { "source": "/api/(.*)", "destination": "/api/chat.py" },
-      { "source": "/(.*)", "destination": "/index.html" }
-    ]
-  }
+  "version": 2,
+  "builds": [
+    { "src": "api/chat.py", "use": "@vercel/python" },
+    { "src": "index.html", "use": "@vercel/static" }
+  ],
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/chat.py" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
